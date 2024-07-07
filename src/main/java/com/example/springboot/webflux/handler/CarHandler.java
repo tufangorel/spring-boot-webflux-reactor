@@ -23,4 +23,22 @@ public class CarHandler {
         Flux<Car> carListNonBlocking = carRepository.getCarListNonBlocking();
         return ServerResponse.ok().body(carListNonBlocking, Car.class);
     }
+
+    public Mono<ServerResponse> loadCarById(ServerRequest request) {
+
+        int id = Integer.parseInt( request.pathVariable("id"));
+
+        Mono<Car> car = carRepository.getCarListNonBlocking()
+                                        .filter(c -> c.getId() == id )
+                                        .next();
+        return ServerResponse.ok().body(car, Car.class);
+    }
+
+    public Mono<ServerResponse> save(ServerRequest request) {
+
+        Mono<Car> carMono = request.bodyToMono(Car.class);
+        Mono<String> stringMono = carMono.map(dto -> dto.getId() + ":" + dto.getType());
+
+        return ServerResponse.ok().body(stringMono, String.class);
+    }
 }

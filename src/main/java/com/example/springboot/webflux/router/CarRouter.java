@@ -25,6 +25,8 @@ public class CarRouter {
         return RouterFunctions.route()
                 .GET("/router/cars", carHandler::loadCars)
                 .GET("/router/cars/stream", carsStreamHandler::getCars)
+                .GET("/router/cars/{id}", carHandler::loadCarById)
+                .POST("/router/cars/save", carHandler::save)
                 .build();
     }
 }
